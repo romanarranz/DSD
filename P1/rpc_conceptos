@@ -1,0 +1,31 @@
+Nos tenemos que preocupar de diseñar las interfaces y luego las estructuras de datos.
+Los procedimientos remotos estaran en la memoria del servidor y estos seran llamados por los clientes.
+
+RPCgen compilador
+
+Los ficheros de las interfaces serán fichero.x (con extension .x)
+
+A RPCgen le pasaremos el archivo .x
+
+$ rpcgen -NCa src/rpc.x
+N -> Cstyle
+C -> ANSI-C style
+
+/* rpc.x: Remote sum operation */
+/* suma es el procedimiento 1, en la version 1 del programa remoto SUMA, con el numero de programa 0x20000001 */
+program SUMA {
+	version SUMAVER {
+		int suma(int,int) = 1;
+	} = 1;
+} = 0x20000001;
+
+Esta orden generara una serie de archivos Makefile.rpc  rpc_client.c  rpc_clnt.c  rpc.h  rpc_server.c  rpc_svc.c  rpc.x  rpc_xdr.c
+Solo tenemos que modificar rpc_client.c y rpc_server.c
+
+$ make -f makefile.rpc
+
+Crea dos ejecutables a_client y a_server
+No es C, no es C++ es un lenguaje propio
+
+RPC es un IDL que es un lenguaje de definicion de interfaces
+La potencia de RPC es que al usar interfaces de definicion estas se pueden usar tanto para exportar el codigo a c, como a java, un middleware

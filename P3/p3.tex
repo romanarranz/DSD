@@ -1,0 +1,187 @@
+\documentclass[12pt, a4paper, spanish]{scrartcl}
+\usepackage{graphicx,color,xcolor}
+\usepackage[spanish]{babel}
+\selectlanguage{spanish}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{url}
+\usepackage{caption}
+
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{%
+  \parbox{\textwidth}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}\vskip+0pt}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white, margin=0pt}
+\lstset{frame=single,xleftmargin=\fboxsep,xrightmargin=-\fboxsep, rulecolor= \color{gray}, breaklines=true, belowcaptionskip=8pt, aboveskip=10pt, belowskip=10pt, tabsize=2, showstringspaces=false}
+
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{gray}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\begin{document}
+
+%\title{Desarrollo de Sistemas Distribuidos}
+%\subtitle{Práctica 3 - Servicios Web en la nube}
+%\author{Manuel Noguera, Carlos Rodríguez-Domínguez, José Luis Garrido}
+%\date{2013}
+%\maketitle
+
+%\newpage
+
+\tableofcontents
+
+\newpage
+
+\section{Requisitos Previos}
+\label{req}
+
+Para llevar a cabo esta práctica es necesario instalar Node.js, Socket.io y MongoDB. Estos software pueden ser instalados en cualquier sistema operativo. No obstante, en este documento se describe su instalación en el sistema operativo Ubuntu 12.04.
+
+\subsection{Instalación de Node.js}
+
+Para instalar Node.js desde Ubuntu se deberán ejecutar las siguientes órdenes desde el terminal:
+
+\begin{lstlisting}
+> sudo apt-get update
+> sudo apt-get install python-software-properties
+> sudo apt-get install python g++ make
+> sudo add-apt-repository ppa:chris-lea/node.js
+> sudo apt-get update
+> sudo apt-get install nodejs
+\end{lstlisting}
+
+Tras la instalación de Node.js se deberá comprobar que se pueden ejecutar las órdenes ``nodejs'' y "npm".
+
+\subsection{Instalación de Socket.io}
+
+Para instalar Socket.io se deberá ejecutar desde el terminal:
+
+\begin{lstlisting}
+> sudo npm install socket.io
+\end{lstlisting}
+
+Si todo es correcto, en nuestro directorio personal deberemos tener una nueva carpeta llamada ``node\_modules'' que deberá tener una subcarpeta llamada ``socket.io''.
+
+\subsection{Instalación de MongoDB}
+\label{install-mongodb}
+
+MongoDB se deberá instalar en dos pasos. Primero se deberá instalar el servidor de bases de datos de MongoDB:
+
+\begin{lstlisting}
+> sudo apt-get install mongodb
+\end{lstlisting}
+
+MongoDB deberá iniciarse automáticamente como un servicio en segundo plano. Podemos comprobar que la instalación ha sido satisfactoria ejecutando la orden "mongo". Con dicha orden accedemos desde nuestro terminal a una shell que nos permite interactuar con el servidor de MongoDB.
+
+A continuación se deberá instalar el módulo que nos permitirá desarrollar un cliente Node.js para una base de datos MondoDB.:
+
+\begin{lstlisting}
+> sudo npm install mongodb
+\end{lstlisting}
+
+\section{Implementación de Servicios con Node.js}
+
+Node.js (\url{http://nodejs.org}) es una plataforma que permite implementar servicios web haciendo uso del lenguaje de programación JavaScript. Los servicios implementados sobre Node.js tienen un modelo de comunicación asíncrono y dirigido por eventos, tratando de maximizar la escalabilidad y la eficiencia de dichos servicios.
+
+Los servicios se implementan en ficheros con extensión ``.js''. Un ejemplo sencillo de servicio web escrito en Node.js es el siguiente:
+
+\lstinputlisting[language=JavaScript, title=\lstname, numbers=left]{helloworld.js}
+
+Podemos probar su funcionamiento ejecutando desde el terminal:
+
+\begin{lstlisting}
+> nodejs helloworld.js
+\end{lstlisting}
+
+Una vez ejecutado el servicio, podremos abrir nuestro navegador y comprobar que si navegamos a la dirección ``http://localhost:8080/'' nos aparecerá el mensaje ``Hola Mundo''.
+
+En el código anterior, se comienza obteniendo un módulo de entre los disponibles en Node.js. En este caso se obtiene el módulo ``http'', que permite implementar servicios que sirvan contenidos usando el protocolo http. En Node.js se pueden obtener referencias a tantos módulos como se requieran y hacer uso de ellos de manera combinada.
+
+A continuación se crea un servidor http. El parámetro del constructor de un servidor es una función con dos parámetros: request y response. Dicha función se llamará cada vez que se reciba una petición mediante el protocolo http (por ejemplo usando un navegador para acceder al servicio implementado).  En el objeto request se codifica el mensaje de petición recibido en el servicio. Dicho mensaje se imprime en la línea 4. Con el objeto response podemos crear una respuesta a la petición recibida. Un ejemplo de respuesta se implementa en las líneas 5-7.
+
+En la línea 10, se hace que el servidor http comience a recibir peticiones en el puerto 8080. Nótese como a continuación se puede ejecutar más código y que cuando se llega al final del código, el servicio no termina su ejecución. Ésto se debe a que en Node.js la mayoría de las operaciones son no bloqueantes, pero se impide la finalización de un programa mientras existan puertos del sistema operativo en uso. Eso facilita el desarrollo de servicios con una arquitectura dirigida por eventos.
+
+En el siguiente ejemplo se muestra como implementar una calculadora distribuida usando una interfaz tipo REST:
+
+\lstinputlisting[language=JavaScript, title=\lstname, numbers=left]{calculadora.js}
+
+Este servicio recibe peticiones REST del tipo ``http://localhost:8080/sumar/2/3''. Se puede comprobar utilizando un navegador como el servicio devolverá el resultado de la operación solicitada sobre los números aportados. En este caso los resultados devueltos tienen formato HTML. Por ello es necesario especificar que el tipo MIME de la respuesta es ``text/html'', tal y como se puede observar en la línea 29.
+
+En el siguiente ejemplo se realiza una mejora del servicio anterior. Con este nuevo servicio se proporciona una web con una interfaz para la calculadora en caso de que el usuario acceda desde el navegador a la url ``http://localhost:8080''. El código fuente de este nuevo servicio es:
+
+\lstinputlisting[language=JavaScript, title=\lstname, numbers=left]{calculadora-web.js}
+
+Se puede observar como se hace uso de un módulo llamado ``fs''. Este módulo permite realizar operaciones de entrada/salida sobre el sistema de ficheros en el servidor. En este caso se utiliza para leer los ficheros almacenados en la carpeta donde se ejecuta el servicio y devolverlos al cliente como respuesta. Nótese como la lectura de un fichero se realiza de manera asíncrona, notificándose el fin de lectura en una función pasada como parámetro. También se hace uso de un módulo llamado ``path'' que permite extraer información de una ruta a partir de cadenas de caractéres.
+
+Además del servicio, a continuación se presenta un ejemplo de cliente web. Su código fuente (``calc.html'') se muestra a continuación:
+
+\lstinputlisting[language=JavaScript, title=\lstname, numbers=left]{calc.html}
+
+El cliente web muestra un formulario cuyo envío se realiza mediante una función JavaScript. Dicha función obtiene los valores introducidos por el usuario en el formulario, crea una petición tipo REST y finalmente envía la petición al servicio de manera asíncrona (con XMLHttpRequest).
+
+La explicación detallada sobre como desarrollar aplicaciones web cliente queda fuera de los ámbitos de esta práctica. No obstante, para facilitar su implementación se recomienda el uso del framework jQuery para JavaScript.
+
+\section{Aplicaciones en Tiempo Real con Socket.io}
+
+Un gran problema que ha existido durante años en la web es la imposibilidad de enviar información desde un servicio hacia un cliente sin que el propio cliente la haya solicitado previamente. Por ejemplo, en un chat, hasta hace poco era inviable tecnológicamente notificar a todos los usuarios que un nuevo mensaje había sido enviado por algún usuario. Por ello, se optaba por realizar consultas periódicas desde los clientes hacia los servicios para comprobar si había o no nueva información para mostrar al usuario. Dicho sistema de comunicación (conocido como \emph{polling} o modelo de notificaciones tipo \emph{pull}) es altamente ineficiente e impide que los servicios pudieran atender adecuadamente a un alto número de usuarios de manera simultánea, presentando, por tanto, problemas de escalabilidad. El nuevo estándar HTML5 trata de solventar el problema anterior agregando soporte a sockets (\emph{WebSockets}) al lenguaje JavaScript. De esta manera es posible mantener conexiones permanentes desde el un  cliente hacia un servicio y que el servicio transmita información al cliente cuando sea necesario (notificaciones tipo \emph{push}).
+
+Socket.io es un módulo para Node.js que permite implementar aplicaciones web en tiempo real mediante WebSockets. El modelo de comunicaciones utilizado se conoce como publish-subscribe. Dicho modelo de comunicaciones, asíncrono y dirigido por eventos, permite que un cliente solicite la recepción de determinadas notificaciones (\emph{suscripción}). El servicio, a partir de ese instante, cuando reciba una notificación, la enviará a todos los suscriptores conectados (\emph{publicación}). Por defecto, Socket.io incorpora los siguientes eventos:
+
+\begin{itemize}
+\item \textbf{'connect'} - Se emite al realizarse una conexión correctamente.
+\item \textbf{'connecting'} - Notifica en un cliente que se está intentando un conexión hacia un servicio.
+\item \textbf{'disconnect'} - Notificación de la desconexión entre cliente y servicio.
+\item \textbf{'connect\_failed'} - Se emite cuando socket.io no es capaz de establecer una conexión.
+\item \textbf{'error'} - Notificación de un error que no puede ser tratado mediante cualquier otro evento por defecto.
+\item \textbf{'message'} - La función \emph{emit} es la que permite en Socket.io notificar eventos. No obstante, también existe la función \emph{send}, que permite enviar información arbitraria a nivel de sockets. Si en vez de utilizar la función ``emit'' para transferir información hacemos uso de la función ``send'', entonces se notificará este evento en el receptor para que éste pueda gestionar la información recibida. 
+\item \textbf{'anything'} - Notificación de que se ha recibido cualquier tipo de evento definido por el usuario. Esta notificación no se recibe para los eventos que aporta Socket.io por defecto (los enumerados en esta lista).
+\item \textbf{'reconnect'} - Se emite cuando un cliente trata de reconectarse a un servicio.
+\item \textbf{'reconnect\_failed'} - Error de reconexión a un servicio.
+\item \textbf{'reconnecting'} - Notificación de que un cliente está tratando de reconectarse a un servicio.
+\end{itemize}
+
+El siguiente ejemplo muestra la implementación sobre Socket.io de un servicio que envía una notificación que contiene las direcciones de todos los clientes conectados al propio servicio. Dicha notificación se envía a todos los cliente suscritos cada vez que un nuevo cliente se conecta o desconecta. El envío a todos los clientes se realiza llamando a la función \emph{emit} sobre el array de clientes conectados (\emph{io.sockets.emit(...)}). Además, cuando el servicio recibe un evento de tipo ``output-evt'' le envía al cliente el mensaje ``Hola Cliente!''.
+
+\lstinputlisting[language=JavaScript, title=\lstname, numbers=left]{connections.js}
+
+El cliente web que se muestra a continuación (``connections.html'') se conecta al servicio y le envía un evento de tipo ``output-evt'' con el mensaje ``Hola Servicio!''. El cliente, además, se suscribe a los eventos ``output-evt'', ``all-connections'' y ``disconnect''. Cuando recibe un evento tipo ``output-evt'' muestra un mensaje con el contenido enviado desde el servicio. Al recibir un evento tipo ``all-connections'' muestra un listado con todos los usuarios conectados (su dirección IP y su puerto de conexión). Finalmente, al recibir el evento ``disconnect'', que se recibe cuando el servicio deja de estar disponible (por ejemplo, ha ocurrido algún error de conectividad), se muestra el mensaje ``El servicio ha dejado de funcionar!!''.
+
+\lstinputlisting[language=JavaScript, title=\lstname, numbers=left]{connections.html}
+
+Se puede comprobar el funcionamiento de cliente web descrito abriendo varias ventanas de navegación y escribiendo como url la dirección IP y puerto del servicio. Cada vez que se abra una nueva ventana o se cierre podremos observar como la lista de usuarios va modificándose dinámicamente, agregándose o eliminándose usuarios de la lista, respectivamente. Además, se puede probar a terminar la ejecución del servicio. Veremos como el cliente web muestra un mensaje indicándolo. Por último, si ejecutamos el servicio de nuevo observaremos como los clientes se conectan automáticamente al mismo y actualizan apropiadamente la lista de usuarios.
+
+\section{Uso de MongoDB desde Node.js}
+
+MongoDB es una base de datos tipo NoSQL. Este tipo de bases de datos permiten guardar información no estructurada. De tal forma, cada entrada en una base de datos MongoDB podrá tener un número variable de parejas claves-valor asociados mediante colecciones (\emph{collections}).
+
+Podemos acceder a bases de datos MongoDB desde cualquier servicio escrito sobre la plataforma Node.js una vez instalado el módulo correspondiente, tal y como se describe en la sección \ref{install-mongodb}.
+
+El siguiente ejemplo muestra la implementación de un servicio que recibe dos tipos notificaciones mediante Socket.io: ``poner'' y ``obtener''. El contenido del primer tipo de notificación es introducido por el servicio en la base de datos ``mibd'', dentro de la colección de claves-valor ``test''. Al recibir el segundo tipo de notificación, el servicio hace una consulta sobre la base de datos ``mibd'' en base al contenido de la propia notificación y le devuelve los resultados al cliente. Además, cuando un cliente se conecta, el servicio le devuelve su dirección de conexión.
+
+\lstinputlisting[language=JavaScript, title=\lstname, numbers=left]{mongo-test.js}
+
+El siguiente cliente web introduce en la base de datos su host, su puerto y el momento en el que se conectó al servicio. A continuación trata de recuperar de la base de datos todo el historial de conexiones realizadas desde el host donde se ejecuta el cliente.
+
+\lstinputlisting[language=JavaScript, title=\lstname, numbers=left]{mongo-test.html}
+
+Se puede observar como cada vez que se abre el cliente web aparece una nueva entrada en la lista de conexiones.
+
+\section{Descripción de la Práctica}
+
+\subsection{Servicio Web}
+
+\subsection{Cliente HTML}
+
+\subsection{Despliegue en la Nube}
+
+\end{document}

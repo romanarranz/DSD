@@ -1,0 +1,71 @@
+$ netstat -atu
+Conexiones activas de Internet (servidores y establecidos)
+Proto  Recib Enviad Dirección local         Dirección remota       Estado      
+tcp        0      0 localhost:29754         *:*                     ESCUCHAR   
+tcp        0      0 *:db-lsp                *:*                     ESCUCHAR   
+tcp        0      0 localhost:17600         *:*                     ESCUCHAR   
+tcp        0      0 localhost:mysql         *:*                     ESCUCHAR   
+tcp        0      0 localhost:5940          *:*                     ESCUCHAR   
+tcp        0      0 rag-laptop:domain       *:*                     ESCUCHAR   
+tcp        0      0 localhost:ipp           *:*                     ESCUCHAR   
+tcp       38      0 cvi092085.ugr.es:54840  client-16a.v.drop:https CLOSE_WAIT 
+tcp        1      0 cvi092085.ugr.es:40795  209-20-75-76.slice:http CLOSE_WAIT 
+tcp       38      0 cvi092085.ugr.es:40649  ec2-174-129-226-1:https CLOSE_WAIT 
+tcp       38      0 cvi092085.ugr.es:45062  client-16b.v.drop:https CLOSE_WAIT 
+tcp       38      0 cvi092085.ugr.es:54847  client-16a.v.drop:https CLOSE_WAIT 
+tcp       38      0 cvi092085.ugr.es:54839  client-16a.v.drop:https CLOSE_WAIT 
+tcp       38      0 cvi092085.ugr.es:54849  client-16a.v.drop:https CLOSE_WAIT 
+tcp        0      0 cvi092085.ugr.es:48468  sjd-rd12-8d.sjc.d:https ESTABLECIDO
+tcp6       0      0 [::]:http               [::]:*                  ESCUCHAR   
+tcp6       0      0 ip6-localhost:ipp       [::]:*                  ESCUCHAR   
+udp        0      0 *:ipp                   *:*                                
+udp        0      0 *:17500                 *:*                                
+udp        0      0 *:mdns                  *:*                                
+udp        0      0 *:34253                 *:*                                
+udp        0      0 rag-laptop:domain       *:*                                
+udp        0      0 *:bootpc                *:*                                
+udp        0      0 *:2239                  *:*                                
+udp6       0      0 [::]:mdns               [::]:*                             
+udp6       0      0 [::]:44666              [::]:*                             
+udp6       0      0 [::]:24331              [::]:*             
+
+$ more /etc/services 
+# Network services, Internet style
+#
+# Note that it is presently the policy of IANA to assign a single well-known
+# port number for both TCP and UDP; hence, officially ports have two entries
+# even if the protocol doesn't support UDP operations.
+#
+# Updated from http://www.iana.org/assignments/port-numbers and other
+# sources like http://www.freebsd.org/cgi/cvsweb.cgi/src/etc/services .
+# New ports will be added on request if they have been officially assigned
+# by IANA and used in the real-world or are needed by a debian package.
+# If you need a huge list of used numbers please install the nmap package.
+
+tcpmux		1/tcp				# TCP port service multiplexer
+echo		7/tcp
+echo		7/udp
+discard		9/tcp		sink null
+discard		9/udp		sink null
+systat		11/tcp		users
+daytime		13/tcp
+daytime		13/udp
+netstat		15/tcp
+qotd		17/tcp		quote
+msp		18/tcp				# message send protocol
+msp		18/udp
+chargen		19/tcp		ttytst source
+chargen		19/udp		ttytst source
+ftp-data	20/tcp
+ftp		21/tcp
+fsp		21/udp		fspd
+ssh		22/tcp				# SSH Remote Login Protocol
+ssh		22/udp
+telnet		23/tcp
+smtp		25/tcp		mail
+time		37/tcp		timserver
+time		37/udp		timserver
+rlp		39/udp		resource	# resource location
+
+$ xinitd.conf 
+es el superdemonio que checkea el resto de los demonios

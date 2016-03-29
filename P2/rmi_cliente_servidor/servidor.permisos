@@ -1,0 +1,4 @@
+grant codeBase "file:/home/roman/Escritorio/rmi_cliente_servidor/" {
+        permission java.security.AllPermission;
+};
+

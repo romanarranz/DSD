@@ -1,0 +1,19 @@
+definir una interfaz remota tanto para el servidor como para el cliente.
+
+El cliente le pasa al servidor "un cliente con su identifcador 'string'", el servidor hace un lookup de ese objeto remoto e invoca el metodo de ese objeto remoto.
+
+Chat grupal
+
+Cliente => mandar(string cliente, string mensaje)	
+Servidor => buscarCliente en su lista + llamar a la interfaz remota de ese cliente y hacer cliente_I.mostrarMensaje(mensaje)
+
+Chat User per User
+Cliente => mandar(string cliente1, string cliente2)
+Servidor => proporciona la referencia del cliente2 al cliente1 y entonces el cliente1 madara mensajes directamente a cliente2
+
+
+http://www.ejbtutorial.com/java-rmi/a-step-by-step-implementation-tutorial-for-java-rmi
+http://www.chuidiang.com/java/rmi/rmi.php
+http://laurel.datsi.fi.upm.es/~ssoo/SD.dir/practicas/guiarmi.html
+
+http://www.pecan.es/category/java/

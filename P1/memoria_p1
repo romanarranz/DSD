@@ -1,0 +1,72 @@
+# ---------------------- Comandos utiles ----------------------
+$ env => muestra las variables globales del sistema
+
+# ---------------------- Paquetes necesarios ----------------------
+$ sudo apt-get install rpcbind
+
+Usa el puerto número 111 tanto para TCP como UDP
+
+# ---------------------- rpcinfo ----------------------
+
+La lista de registros se puede obtener con la orden:
+
+$ rpcinfo
+   program version netid     address                service    owner
+    100000    4    tcp6      ::.0.111               portmapper superuser
+    100000    3    tcp6      ::.0.111               portmapper superuser
+    100000    4    udp6      ::.0.111               portmapper superuser
+    100000    3    udp6      ::.0.111               portmapper superuser
+    100000    4    tcp       0.0.0.0.0.111          portmapper superuser
+    100000    3    tcp       0.0.0.0.0.111          portmapper superuser
+    100000    2    tcp       0.0.0.0.0.111          portmapper superuser
+    100000    4    udp       0.0.0.0.0.111          portmapper superuser
+    100000    3    udp       0.0.0.0.0.111          portmapper superuser
+    100000    2    udp       0.0.0.0.0.111          portmapper superuser
+    100000    4    local     /run/rpcbind.sock      portmapper superuser
+    100000    3    local     /run/rpcbind.sock      portmapper superuser
+
+Los servicios del nivel más bajo (ya que consta de diferentes nivles) no son necesarios cuando se utiliza la utilidad rpcgen para generar 
+los programas RPC.
+
+Representación externa de datos (XDR) es la que usa RPC
+
+# ---------------------- rpgen ----------------------
+
+/* Archivo msg.x: Protocolo de impresion de un mensaje remoto */
+program MESSAGEPROG {
+	version PRINTMESSAGEVERS {
+		int PRINTMESSAGE (string) = 1;
+	} = 1;
+} = 0x20000001;
+
+0 - 1fffffff 		Definidos por Sun
+20000000 - 3fffffff Definidos por los usuarios para programas particulares
+40000000 - 5fffffff Reservados para programas que generan números de programas dinámicamente
+60000000 - ffffffff Reservados para uso futuro
+
+Generación del archivo de cabecera msg.h, stub del cliente (msg_clnt.c) y stub del servidor (msg_svc.c) con:
+$ rpcgen msg.x
+$ ls
+msg_clnt.c  msg.h  msg_svc.c  msg.x
+
+Compilación de los dos programas, cliente y servidor, y enlazado de cada uno con la biblioteca libnsl que contiene todas las funciones de 
+red (incluyendo RPC y XDR):
+$ gcc orprintmsg.c msg_clnt.c -o rprintmsg -lnsl
+$ gcc msg_proc.c msg_svc.c -o msg_server -lnsl
+
+
+# ---------------------- CALCULADORA ----------------------
+
+program CALCULADORA {
+	version CALCULADORAVER {
+		int suma(int,int) = 1;
+		int resta(int,int) = 2;
+		int multiplicacion(int,int) = 3;
+		double division(int,int) = 4;
+	} = 1;
+} = 0x20000001;
+
+$ rpcgen -NCa calculadora.x
+$ ls
+calculadora_client.c  calculadora.h         calculadora_svc.c  calculadora_xdr.c
+calculadora_clnt.c    calculadora_server.c  calculadora.x      Makefile.calculadora

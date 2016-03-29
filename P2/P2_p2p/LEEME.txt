@@ -1,0 +1,9 @@
+Para iniciar el demonio rmi ejecutar la siguiente linea
+$ rmiregistry -J-Djava.rmi.server.useCodebaseOnly=false
+
+
+Para iniciar el servidor abrir una terminal y ejecutar
+$ java -jar servidor.jar
+
+Para iniciar cada cliente ejecutar en una terminal
+$ java -jar cliente.jar

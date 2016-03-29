@@ -1,0 +1,11 @@
+$ rmiregistry
+
+// Ejecucion del servidor
+$ java -cp . -Djava.rmi.server.codebase=file:/home/roman/Escritorio/rmi_cliente_servidor/ -Djava.rmi.server.hostname=localhost -Djava.security.policy=servidor.permisos Servidor
+
+// Ejecucion del cliente
+$ java -cp . -Djava.rmi.server.codebase=file:/home/roman/Escritorio/rmi_cliente_servidor/ -Djava.security.policy=servidor.permisos Cliente localhost 1
+
+
+
+
