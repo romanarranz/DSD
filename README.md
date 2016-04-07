@@ -25,3 +25,6 @@ A diferencia con RPC, RMI si cumple con los requisitos para implementar sistemas
 > 
 > - Utilizaremos `rmiregistry` como servicio para registrar los objetos remotos además de que puede enviar y devolver referencias a objetos remotos como argumentos y resultados de procedimientos.
 > - Se facilitan scripts para hacer el mapeo de los servicios y para arrancar tanto el cliente como el servidor.
+
+#### Práctica 3: Node JS
+
