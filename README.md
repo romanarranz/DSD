@@ -27,4 +27,17 @@ A diferencia con RPC, RMI si cumple con los requisitos para implementar sistemas
 > - Se facilitan scripts para hacer el mapeo de los servicios y para arrancar tanto el cliente como el servidor.
 
 #### Práctica 3: Node JS
+[NodeJS](http://nodejs.org) es una plataforma que nos permite implementar servicios web haciendo uso del lenguaje de programación Javascript. Estos servicios son asíncronos y dirigidos por eventos, enfocados a maximizar la escalabilidad y eficiencia de los mismos.
 
+Con el estándar HTML5 surge la posibilidad de usar `WebSockets` con **Javascript**, con los que podemos realizar notificaiones `Push` a los clientes sin necesidad de que refresquen la página o que tengamos un código consultando cada X tiempo mandando peticiones.
+
+> **Consideraciones**
+> 
+> - Usaremos una interfaz de tipo `REST` para gestionar las peticiones.
+> - Como es asíncrono las respuestas serán ofrecidas con `XMLHttpRequest`.
+> - Para gestionar las notificaciones `Push` usaremos `Socket.io`.
+> - Para almacenar los mensajes entrantes de la implementación del chat usaremos `MongoDB` por su integración con el formato JSON.
+> 
+> **Implementaciones**
+> - Calculadora usando API REST
+> - Cliente Chat
