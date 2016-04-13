@@ -12,7 +12,9 @@ Cada una de ellas se pueden encontrar en los directorios `P2_p2p`y `P2_grupal` r
 
 Se deja como modo de apoyo los diagramas de clases que se realizaron para aclarar más el funcionamiento de esta teconología.
 
-##UML Chat Grupal
+## UML Chat Grupal
 
-![uml1](./uml.png)
+![uml1](./diagramas/uml_grupal.png)
 
+## UML Chat P2P
+![uml2](./diagramas/uml_p2p.png)

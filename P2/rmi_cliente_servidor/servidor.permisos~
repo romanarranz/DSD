@@ -1,4 +1,0 @@
-grant codeBase "file:/home/roman/Escritorio/prueba/" {
-        permission java.security.AllPermission;
-};
-
