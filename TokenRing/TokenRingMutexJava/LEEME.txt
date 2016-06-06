@@ -1,0 +1,2 @@
+$ rmiregistry -J-Djava.rmi.server.useCodebaseOnly=false
+$ java -jar cliente.jar localhost 900 <= ES EL ID DEL NODO DE LA TOPOLOGIA EN ANILLO
